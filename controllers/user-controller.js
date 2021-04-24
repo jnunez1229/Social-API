@@ -4,6 +4,10 @@ const userController = {
     // get all users
     getAllUsers(req, res) {
         User.find({})
+        .populate({
+            path: 'thoughts',
+            select: '-__v'
+        })
         .then(userDB => res.json(userDB))
         .catch(err => {
             console.log(err);
@@ -13,6 +17,10 @@ const userController = {
 
     getUserById({params}, res) {
         User.findOne({_id: params.id})
+        .populate({
+            path: 'thoughts',
+            select: '-__v'
+        })
         .then(userDB => {
             // 404 if no user found
             if(!userDB){
@@ -47,6 +55,22 @@ const userController = {
             .catch(err => res.status(400).json(err));
     },
 
+    addFriend({ params, body }, res) {
+        User.findOneAndUpdate(
+          { _id: params.userId },
+          { $push: { friends: body } },
+          { new: true }
+        )
+          .then(userData => {
+            if (!userData) {
+              res.status(404).json({ message: 'No user found with this id!' });
+              return;
+            }
+            res.json(userData);
+          })
+          .catch(err => res.json(err));
+    },
+
     // delete user
     deleteUser({ params }, res) {
         User.findOneAndDelete({_id: params.id})
@@ -58,7 +82,17 @@ const userController = {
                 res.json(userDB);
             })
             .catch(err => res.status(400).json(err));
-    }    
+    },
+
+    removeFriend({ params }, res) {
+        User.findOneAndUpdate(
+        { _id: params.userId },
+        { $pull: { friends: { userId: params.userId } } },
+        { new: true }
+        )
+        .then(userData => res.json(userData))
+        .catch(err => res.json(err));
+    } 
 }
 
 module.exports = userController;
