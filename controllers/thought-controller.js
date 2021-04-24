@@ -49,6 +49,23 @@ const ThoughtController = {
         .catch(err => res.status(400).json(err));
     },
 
+    // add reaction to Thought
+    addReaction({params, body}, res){
+        Thought.findOneAndUpdate(
+            {_id: params.thoughtId},
+            {$push: { reactions: body}},
+            { new: true, runValidators: true}
+        )
+        .then(thoughtDB => {
+            if(!thoughtDB) {
+                res.status(404).json({message: 'no thought found with this id'});
+                return
+            }
+            res.json(thoughtDB)
+        })
+        .catch(err => res.json(err))
+    },
+
     // update Thought by id
     updateThought({params, body}, res) {
         Thought.findOneAndUpdate({ _id: params.id}, body, { new: true, runValidators: true})
@@ -73,7 +90,21 @@ const ThoughtController = {
                 res.json(thoughtDB);
             })
             .catch(err => res.status(400).json(err));
-    }    
-}
+    },
+    
+    // remove reaction
+    removeReaction({ params, body }, res) {
+        console.log(params)
+        console.log(body.reactionId)
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $pull: { reactions: { reactionId: body.reactionId } } },
+            { new: true }
+        )
+      .then(dbPizzaData => res.json(dbPizzaData))
+      .catch(err => res.json(err));
+  }
+};
+
 
 module.exports = ThoughtController;
