@@ -9,9 +9,10 @@ const userController = {
             select: '-__v'
         })
         .populate({
-            path: 'thoughts',
+            path: 'friends',
             select: '-__v'
         })
+        .select('-__v')
         .then(userDB => res.json(userDB))
         .catch(err => {
             console.log(err);
@@ -29,6 +30,7 @@ const userController = {
             path: 'friends',
             select: '-__v'
         })
+        .select('-__v')
         .then(userDB => {
             // 404 if no user found
             if(!userDB){

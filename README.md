@@ -9,9 +9,8 @@
  *  Client has the ability to create, retrieve all (or single), update, and delete User and Thought data
 
  *  Link to Github Repository: (https://github.com/jnunez1229/social-API)
- *  Link to Deployed Page: (https://protected-caverns-20085.herokuapp.com/)
   
 
 ## Application in Use
-
-![](public\img\tech-blog.gif)
+[User Model Walk Through](https://drive.google.com/file/d/1F2gyEj3MrVqDqWhGvAsnTzAsFqtLq5NA/view)
+[Thought Model Walk Through](https://drive.google.com/file/d/1OyI3fywGgzxFv4VLc1rUN-Ihnw_WiTga/view)

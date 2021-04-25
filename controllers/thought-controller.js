@@ -4,6 +4,7 @@ const ThoughtController = {
     // get all Thoughts
     getAllThoughts(req, res) {
         Thought.find({})
+        .select('-__v')
         .then(thoughtDB => res.json(thoughtDB))
         .catch(err => {
             console.log(err);
@@ -13,6 +14,7 @@ const ThoughtController = {
 
     getThoughtById({params}, res) {
         Thought.findOne({_id: params.id})
+            .select('-__v')
         .then(thoughtDB => {
             // 404 if no Thought found
             if(!thoughtDB){
@@ -81,12 +83,15 @@ const ThoughtController = {
 
     // delete Thought
     deleteThought({ params }, res) {
+        console.log(params)
         Thought.findOneAndDelete({_id: params.id})
             .then(thoughtDB => {
-                if(!ThoughtDB){
+                if(!thoughtDB){
                     res.status(404).json({ message: 'No Thought found with this id'});
                     return;
                 }
+        console.log(thoughtDB)
+
                 res.json(thoughtDB);
             })
             .catch(err => res.status(400).json(err));
